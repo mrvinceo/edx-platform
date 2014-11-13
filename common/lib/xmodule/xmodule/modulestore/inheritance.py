@@ -57,6 +57,12 @@ class InheritanceMixin(XBlockMixin):
         default=False,
         scope=Scope.settings,
     )
+    group_access = Dict(
+        help="A dictionary mapping which groups can be shown this block. The keys "
+             "are group configuration ids and the values are a set of groups.",
+        default={},
+        scope=Scope.settings,
+    )
     course_edit_method = String(
         display_name=_("Course Editor"),
         help=_("Enter the method by which this course is edited (\"XML\" or \"Studio\")."),

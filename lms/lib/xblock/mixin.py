@@ -1,7 +1,9 @@
 """
 Namespace that defines fields common to all blocks used in the LMS
 """
-from xblock.fields import Boolean, Scope, String, XBlockMixin
+from xblock.fields import Boolean, Scope, String, XBlockMixin, Dict
+from xblock.validation import Validation, ValidationMessage
+from xmodule.modulestore.inheritance import UserPartitionList
 
 # Make '_' a no-op so we can scrape strings
 _ = lambda text: text
@@ -53,3 +55,62 @@ class LmsBlockMixin(XBlockMixin):
         default=False,
         scope=Scope.settings,
     )
+    group_access = Dict(
+        help="A dictionary mapping which groups can be shown this block. The keys "
+             "are group configuration ids and the values are a set of groups.",
+        default={},
+        scope=Scope.settings,
+    )
+
+    # Specified here so we can see what the value set at the course-level is.
+    user_partitions = UserPartitionList(
+        help=_("The list of group configurations for partitioning students in content experiments."),
+        default=[],
+        scope=Scope.settings
+    )
+
+    def _get_user_partition(self, user_partition_id):
+        """
+        Returns the user partition with the specified id, or None if there is no such partition.
+        """
+        for user_partition in self.user_partitions:
+            if user_partition.id == user_partition_id:
+                return user_partition
+
+        return None
+
+    def is_visible_to_group(self, user_partition, group):
+        """
+        Returns true if this xblock should be shown to a user in the specified user partition group.
+        """
+        if not self.group_access:
+            return True
+        return group.id in self.group_access.get(user_partition.id, [])
+
+    def validate(self):
+        """
+        Validates the state of this xblock instance.
+        """
+        _ = self.runtime.service(self, "i18n").ugettext  # pylint: disable=redefined-outer-name
+        validation = Validation(self.location)
+        for user_partition_id, group_ids in self.group_access.iteritems():
+            user_partition = self._get_user_partition(user_partition_id)
+            if not user_partition:
+                validation.add(
+                    ValidationMessage(
+                        ValidationMessage.ERROR,
+                        _(u"This xblock refers to a deleted content group configuration.")
+                    )
+                )
+            else:
+                for group_id in group_ids:
+                    group = user_partition.get_group(group_id)
+                    if not group:
+                        validation.add(
+                            ValidationMessage(
+                                ValidationMessage.ERROR,
+                                _(u"This xblock refers to a deleted content group.")
+                            )
+                        )
+
+        return validation
