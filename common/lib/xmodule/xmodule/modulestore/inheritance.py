@@ -58,8 +58,11 @@ class InheritanceMixin(XBlockMixin):
         scope=Scope.settings,
     )
     group_access = Dict(
-        help="A dictionary mapping which groups can be shown this block. The keys "
-             "are group configuration ids and the values are a set of groups.",
+        help="A dictionary that maps which groups can be shown this block. The keys "
+             "are group configuration ids and the values are a set of group ids. "
+             "If there is no key for a group configuration or if the set of group ids "
+             "is empty then the block is considered visible to all. Note that this "
+             "field is ignored if the block is visible_to_staff_only.",
         default={},
         scope=Scope.settings,
     )

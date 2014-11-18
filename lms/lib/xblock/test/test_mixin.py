@@ -102,15 +102,19 @@ class XBlockGroupAccessTest(LmsXBlockMixinTestCase):
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group1))
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group2))
 
+        # Verify that all groups are visible if the set of group ids is empty
+        self.video.group_access[self.user_partition.id] = {}
+        self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group1))
+        self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group2))
+
         # Verify that only specified groups are visible
         self.video.group_access[self.user_partition.id] = {self.group1.id}    # pylint: disable=no-member
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group1))
         self.assertFalse(self.video.is_visible_to_group(self.user_partition, self.group2))
 
-        # Verify that no groups are visible for an invalid user partition id
-        self.video.group_access.clear()
+        # Verify that having an invalid user partition does not affect group visibility of other partitions
         self.video.group_access[999] = {self.group1.id}
-        self.assertFalse(self.video.is_visible_to_group(self.user_partition, self.group1))
+        self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group1))
         self.assertFalse(self.video.is_visible_to_group(self.user_partition, self.group2))
 
         # Verify that group access is still correct even with invalid group ids

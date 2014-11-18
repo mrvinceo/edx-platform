@@ -56,8 +56,11 @@ class LmsBlockMixin(XBlockMixin):
         scope=Scope.settings,
     )
     group_access = Dict(
-        help="A dictionary mapping which groups can be shown this block. The keys "
-             "are group configuration ids and the values are a set of groups.",
+        help="A dictionary that maps which groups can be shown this block. The keys "
+             "are group configuration ids and the values are a set of group ids. "
+             "If there is no key for a group configuration or if the set of group ids "
+             "is empty then the block is considered visible to all. Note that this "
+             "field is ignored if the block is visible_to_staff_only.",
         default={},
         scope=Scope.settings,
     )
@@ -82,17 +85,25 @@ class LmsBlockMixin(XBlockMixin):
     def is_visible_to_group(self, user_partition, group):
         """
         Returns true if this xblock should be shown to a user in the specified user partition group.
+        This method returns true if one of the following is true:
+         - the xblock has no group_access dictionary specified
+         - if the dictionary has no key for the user partition's id
+         - if the value for the user partition's id is an empty set
+         - if the value for the user partition's id contains the specified group's id
         """
         if not self.group_access:
             return True
-        return group.id in self.group_access.get(user_partition.id, [])
+        group_ids = self.group_access.get(user_partition.id, [])
+        if len(group_ids) == 0:
+            return True
+        return group.id in group_ids
 
     def validate(self):
         """
         Validates the state of this xblock instance.
         """
         _ = self.runtime.service(self, "i18n").ugettext  # pylint: disable=redefined-outer-name
-        validation = Validation(self.location)
+        validation = super(LmsBlockMixin, self).validate()
         for user_partition_id, group_ids in self.group_access.iteritems():
             user_partition = self._get_user_partition(user_partition_id)
             if not user_partition:
