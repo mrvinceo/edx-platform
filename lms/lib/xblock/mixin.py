@@ -56,11 +56,13 @@ class LmsBlockMixin(XBlockMixin):
         scope=Scope.settings,
     )
     group_access = Dict(
-        help="A dictionary that maps which groups can be shown this block. The keys "
-             "are group configuration ids and the values are a set of group ids. "
-             "If there is no key for a group configuration or if the set of group ids "
-             "is empty then the block is considered visible to all. Note that this "
-             "field is ignored if the block is visible_to_staff_only.",
+        help=_(
+            "A dictionary that maps which groups can be shown this block. The keys "
+            "are group configuration ids and the values are a list of group IDs. "
+            "If there is no key for a group configuration or if the set of group IDs "
+            "is empty then the block is considered visible to all. Note that this "
+            "field is ignored if the block is visible_to_staff_only."
+        ),
         default={},
         scope=Scope.settings,
     )
@@ -110,7 +112,7 @@ class LmsBlockMixin(XBlockMixin):
                 validation.add(
                     ValidationMessage(
                         ValidationMessage.ERROR,
-                        _(u"This xblock refers to a deleted content group configuration.")
+                        _(u"This xblock refers to a deleted or invalid content group configuration.")
                     )
                 )
             else:
@@ -120,7 +122,7 @@ class LmsBlockMixin(XBlockMixin):
                         validation.add(
                             ValidationMessage(
                                 ValidationMessage.ERROR,
-                                _(u"This xblock refers to a deleted content group.")
+                                _(u"This xblock refers to a deleted or invalid content group.")
                             )
                         )
 

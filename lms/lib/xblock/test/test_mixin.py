@@ -56,7 +56,7 @@ class XBlockValidationTest(LmsXBlockMixinTestCase):
         """
         Test the validation messages produced for an xblock with a valid group access restriction
         """
-        self.video.group_access[self.user_partition.id] = {self.group1.id, self.group2.id}  # pylint: disable=no-member
+        self.video.group_access[self.user_partition.id] = [self.group1.id, self.group2.id]  # pylint: disable=no-member
         validation = self.video.validate()
         self.assertEqual(len(validation.messages), 0)
 
@@ -65,12 +65,12 @@ class XBlockValidationTest(LmsXBlockMixinTestCase):
         Test the validation messages produced for an xblock with full group access.
         """
         # Verify the messages for an invalid user partition id
-        self.video.group_access[999] = {self.group1.id}
+        self.video.group_access[999] = [self.group1.id]
         validation = self.video.validate()
         self.assertEqual(len(validation.messages), 1)
         self.verify_validation_message(
             validation.messages[0],
-            u"This xblock refers to a deleted content group configuration.",
+            u"This xblock refers to a deleted or invalid content group configuration.",
             ValidationMessage.ERROR,
         )
 
@@ -79,12 +79,12 @@ class XBlockValidationTest(LmsXBlockMixinTestCase):
         Test the validation messages produced for an xblock with full group access.
         """
         # Verify the messages for an invalid user partition id
-        self.video.group_access[self.user_partition.id] = {self.group1.id, 999}    # pylint: disable=no-member
+        self.video.group_access[self.user_partition.id] = [self.group1.id, 999]    # pylint: disable=no-member
         validation = self.video.validate()
         self.assertEqual(len(validation.messages), 1)
         self.verify_validation_message(
             validation.messages[0],
-            u"This xblock refers to a deleted content group.",
+            u"This xblock refers to a deleted or invalid content group.",
             ValidationMessage.ERROR,
         )
 
@@ -103,22 +103,22 @@ class XBlockGroupAccessTest(LmsXBlockMixinTestCase):
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group2))
 
         # Verify that all groups are visible if the set of group ids is empty
-        self.video.group_access[self.user_partition.id] = {}
+        self.video.group_access[self.user_partition.id] = []
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group1))
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group2))
 
         # Verify that only specified groups are visible
-        self.video.group_access[self.user_partition.id] = {self.group1.id}    # pylint: disable=no-member
+        self.video.group_access[self.user_partition.id] = [self.group1.id]    # pylint: disable=no-member
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group1))
         self.assertFalse(self.video.is_visible_to_group(self.user_partition, self.group2))
 
         # Verify that having an invalid user partition does not affect group visibility of other partitions
-        self.video.group_access[999] = {self.group1.id}
+        self.video.group_access[999] = [self.group1.id]
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group1))
         self.assertFalse(self.video.is_visible_to_group(self.user_partition, self.group2))
 
         # Verify that group access is still correct even with invalid group ids
         self.video.group_access.clear()
-        self.video.group_access[self.user_partition.id] = {self.group2.id, 999}    # pylint: disable=no-member
+        self.video.group_access[self.user_partition.id] = [self.group2.id, 999]    # pylint: disable=no-member
         self.assertFalse(self.video.is_visible_to_group(self.user_partition, self.group1))
         self.assertTrue(self.video.is_visible_to_group(self.user_partition, self.group2))
