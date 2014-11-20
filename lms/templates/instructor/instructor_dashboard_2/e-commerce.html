@@ -471,6 +471,7 @@
        var coupon_discount = $.trim($('#coupon_discount').val());
        var course_id = $.trim($('#coupon_course_id').val());
        var description = $.trim($('#coupon_description').val());
+       var expiration_date = $.trim($('#coupon_expiration_date').val());
 
        // Check if empty of not
        if (code === '') {
@@ -497,7 +498,8 @@
            "code"  : code,
            "discount": coupon_discount,
            "course_id": course_id,
-           "description": description
+           "description": description,
+           "expiration_date": expiration_date
          },
          url: "${section_data['ajax_add_coupon']}",
          success: function (data) {

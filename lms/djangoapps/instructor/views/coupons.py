@@ -10,7 +10,8 @@ from util.json_request import JsonResponse
 from django.http import HttpResponse, HttpResponseNotFound
 from shoppingcart.models import Coupon, CourseRegistrationCode
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
-
+import datetime
+import pytz
 import logging
 
 log = logging.getLogger(__name__)
@@ -79,9 +80,17 @@ def add_coupon(request, course_id):  # pylint: disable=W0613
             return JsonResponse({
                 'message': _("Please Enter the Coupon Discount Value Less than or Equal to 100")
             }, status=400)  # status code 400: Bad Request
+        expiration_date = None
+        if request.POST.get('expiration_date'):
+            expiration_date = request.POST.get('expiration_date')
+            expiration_date = datetime.datetime.strptime(expiration_date, "%m/%d/%Y").replace(tzinfo=pytz.UTC)+datetime.timedelta(days=1)
+
         coupon = Coupon(
-            code=code, description=description, course_id=course_id,
-            percentage_discount=discount, created_by_id=request.user.id
+            code=code, description=description,
+            course_id=course_id,
+            percentage_discount=discount,
+            created_by_id=request.user.id,
+            expiration_date=expiration_date
         )
         coupon.save()
         return JsonResponse(

@@ -12,6 +12,9 @@
   }
 }
 
+#ui-datepicker-div{z-index: 12000 !important; width: 16.5em !important}
+
+
 .instructor-dashboard-wrapper-2 {
   position: relative;
   // display: table;
@@ -1539,7 +1542,15 @@ input[name="subject"] {
     }
     }
   }
-
+  #add-coupon-modal{
+  ol.list-input{
+    li{
+      input[type="checkbox"]#expiry-check , input[type="checkbox"]#expiry-check + label {display: inline-block; width: auto;margin-top: 10px;}
+      &.full-width{width: 100%;}
+      input#coupon_expiration_date{width: 278px;display: inline-block;float: right;}
+    }
+  }
+}
 }
 
 .profile-distribution-widget {

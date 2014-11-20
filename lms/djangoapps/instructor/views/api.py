@@ -983,7 +983,7 @@ def get_coupon_codes(request, course_id):  # pylint: disable=W0613
     course_id = SlashSeparatedCourseKey.from_deprecated_string(course_id)
     active_coupons = Coupon.objects.filter(course_id=course_id, is_active=True)
     query_features = [
-        'course_id', 'percentage_discount', 'code_redeemed_count', 'description'
+        'course_id', 'percentage_discount', 'code_redeemed_count', 'description', 'expiration_date'
     ]
     coupons_list = instructor_analytics.basic.coupon_codes_features(query_features, active_coupons)
     header, data_rows = instructor_analytics.csvs.format_dictlist(coupons_list, query_features)
