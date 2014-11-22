@@ -1,6 +1,9 @@
 """
 Decorators related to edXNotes.
 """
+import json
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from edxnotes.helpers import (
     get_endpoint,
     get_token,
@@ -8,7 +11,6 @@ from edxnotes.helpers import (
     is_feature_enabled,
 )
 from edxmako.shortcuts import render_to_string
-from django.conf import settings
 
 
 def edxnotes(cls):
@@ -32,6 +34,8 @@ def edxnotes(cls):
             return render_to_string('edxnotes_wrapper.html', {
                 'content': original_get_html(self, *args, **kwargs),
                 'uid': generate_uid(),
+                'edxnotes_visibility_url': reverse("edxnotes_visibility", kwargs={"course_id": course.id}),
+                'edxnotes_visibility': json.dumps(course.edxnotes_visibility),
                 'params': {
                     # Use camelCase to name keys.
                     'usageId': unicode(self.scope_ids.usage_id).encode('utf-8'),
