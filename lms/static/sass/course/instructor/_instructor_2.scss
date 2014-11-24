@@ -1254,12 +1254,13 @@ input[name="subject"] {
       th {
         text-align: left;
         border-bottom: 1px solid $border-color-1;
+        font-size: 16px;
 
         &.c_code {
-          width: 170px;
+          width: 110px;
         }
         &.c_count {
-          width: 85px;
+          width: 60px;
         }
         &.c_course_id {
           width: 320px;
@@ -1268,11 +1269,14 @@ input[name="subject"] {
         &.c_discount {
           width: 90px;
         }
+        &.c_expiry {
+          width: 150px;
+        }
         &.c_action {
-          width: 89px;
+          width: 60px;
         }
         &.c_dsc{
-          width: 260px;
+          width: 200px;
           word-wrap: break-word;
         }
       }
@@ -1297,6 +1301,7 @@ input[name="subject"] {
         padding: 10px 0px;
         position: relative;
         line-height: normal;
+        font-size: 14px;
         span.old-price{
           left: -75px;
           position: relative;

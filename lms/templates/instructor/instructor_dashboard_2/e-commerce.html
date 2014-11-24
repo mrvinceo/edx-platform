@@ -1,4 +1,6 @@
 <%! from django.utils.translation import ugettext as _ %>
+<%! from datetime import datetime, timedelta %>
+<%! import pytz %>
 <%page args="section_data"/>
 <%include file="add_coupon_modal.html" args="section_data=section_data" />
 <%include file="edit_coupon_modal.html" args="section_data=section_data" />
@@ -104,6 +106,7 @@
                         <tr class="coupons-headings">
                            <th class="c_code">${_("Code")}</th>
                            <th class="c_dsc">${_("Description")}</th>
+                           <th class="c_expiry">${_("Expiry Date")}</th>
                            <th class="c_discount">${_("Discount (%)")}</th>
                            <th class="c_count">${_("Count")}</th>
                            <th class="c_action">${_("Actions")}</th>
@@ -111,13 +114,24 @@
                      </thead>
                      <tbody>
                         %for coupon in section_data['coupons']:
-                        %if coupon.is_active == False:
+                        <% current_date = datetime.now(pytz.UTC) %>
+                        <% coupon_expiry_date = coupon.expiration_date %>
+                        %if coupon.is_active == False or (coupon_expiry_date is not None and current_date >= coupon_expiry_date):
                         <tr class="coupons-items inactive_coupon">
-                           %else:
+                        %else:
                         <tr class="coupons-items">
                            %endif
                             <td>${_('{code}').format(code=coupon.code)}</td>
                             <td>${_('{description}').format(description=coupon.description)}</td>
+
+                            <td>
+                              %if coupon.expiration_date:
+                                <% expiry_date = coupon.expiration_date - timedelta(days=1) %>
+                                ${expiry_date.strftime("%B %d, %Y")}
+                              %else:
+                                ${coupon.expiration_date}
+                              %endif
+                            </td>
                             <td>${_('{discount}').format(discount=coupon.percentage_discount)}</td>
                            <td>
                               ${ coupon.couponredemption_set.all().count() }

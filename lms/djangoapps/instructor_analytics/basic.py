@@ -8,6 +8,7 @@ from shoppingcart.models import (
     OrderTypes, RegistrationCodeRedemption, CourseRegistrationCode
 )
 from django.contrib.auth.models import User
+from datetime import timedelta
 import xmodule.graders as xmgraders
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -262,7 +263,9 @@ def coupon_codes_features(features, coupons_list):
         # we have to capture the redeemed_by value in the case of the downloading and spent registration
         # codes csv. In the case of active and generated registration codes the redeemed_by value will be None.
         #  They have not been redeemed yet
-
+        if coupon_dict['expiration_date']:
+            coupon_dict['expiration_date'] = coupon_dict['expiration_date'] - timedelta(days=1)
+            coupon_dict['expiration_date'] = coupon_dict['expiration_date'].strftime("%B %d, %Y")
         coupon_dict['course_id'] = coupon_dict['course_id'].to_deprecated_string()
         return coupon_dict
     return [extract_coupon(coupon, features) for coupon in coupons_list]
