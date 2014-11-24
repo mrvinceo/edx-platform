@@ -83,7 +83,14 @@ def add_coupon(request, course_id):  # pylint: disable=W0613
         expiration_date = None
         if request.POST.get('expiration_date'):
             expiration_date = request.POST.get('expiration_date')
-            expiration_date = datetime.datetime.strptime(expiration_date, "%m/%d/%Y").replace(tzinfo=pytz.UTC)+datetime.timedelta(days=1)
+            try:
+                expiration_date = datetime.datetime.strptime(expiration_date, "%m/%d/%Y").replace(tzinfo=pytz.UTC)+datetime.timedelta(days=1)
+            except ValueError:
+                return JsonResponse(
+                    {'message': _("Please enter the date in this format i-e month/day/year")}
+                    , status=400
+                )  # status code 400: Bad Request
+
 
         coupon = Coupon(
             code=code, description=description,
@@ -151,11 +158,14 @@ def get_coupon_info(request, course_id):  # pylint: disable=W0613
         return JsonResponse({
             'message': _("coupon with the coupon id ({coupon_id}) is already inactive").format(coupon_id=coupon_id)
         }, status=400)  # status code 400: Bad Request
-
+    expiry_date = 'Never Expires'
+    if coupon.expiration_date:
+        expiry_date = (coupon.expiration_date-datetime.timedelta(days=1)).strftime("%B %d, %Y")
     return JsonResponse({
         'coupon_code': coupon.code,
         'coupon_description': coupon.description,
         'coupon_course_id': coupon.course_id.to_deprecated_string(),
         'coupon_discount': coupon.percentage_discount,
+        'expiry_date': expiry_date,
         'message': _('coupon with the coupon id ({coupon_id}) updated successfully').format(coupon_id=coupon_id)
     })  # status code 200: OK by default
