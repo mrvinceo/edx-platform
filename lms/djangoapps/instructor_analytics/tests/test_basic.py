@@ -282,7 +282,7 @@ class TestCourseRegistrationCodeAnalyticsBasic(ModuleStoreTestCase):
             self.assertIn(active_coupon['percentage_discount'], [coupon.percentage_discount for coupon in active_coupons])
             self.assertIn(active_coupon['description'], [coupon.description for coupon in active_coupons])
             if active_coupon['expiration_date']:
-                self.assertIn(active_coupon['expiration_date'], [(coupon.expiration_date-datetime.timedelta(days=1)).strftime("%B %d, %Y") for coupon in active_coupons if coupon.expiration_date])
+                self.assertIn(active_coupon['expiration_date'], [coupon.display_expiry_date for coupon in active_coupons if coupon.expiration_date])
             self.assertIn(
                 active_coupon['course_id'],
                 [coupon.course_id.to_deprecated_string() for coupon in active_coupons]

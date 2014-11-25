@@ -3329,7 +3329,6 @@ class TestCourseRegistrationCodes(ModuleStoreTestCase):
             )
             coupon.save()
 
-
         response = self.client.get(get_coupon_code_url)
         self.assertEqual(response.status_code, 200, response.content)
         self.assertEqual(response['Content-Type'], 'text/csv')

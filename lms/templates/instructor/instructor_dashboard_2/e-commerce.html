@@ -128,8 +128,7 @@
 
                             <td>
                               %if coupon.expiration_date:
-                                <% expiry_date = coupon.expiration_date - timedelta(days=1) %>
-                                ${expiry_date.strftime("%B %d, %Y")}
+                                ${coupon.display_expiry_date}
                               %else:
                                 ${coupon.expiration_date}
                               %endif

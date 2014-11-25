@@ -160,7 +160,7 @@ def get_coupon_info(request, course_id):  # pylint: disable=W0613
         }, status=400)  # status code 400: Bad Request
     expiry_date = 'Never Expires'
     if coupon.expiration_date:
-        expiry_date = (coupon.expiration_date-datetime.timedelta(days=1)).strftime("%B %d, %Y")
+        expiry_date = coupon.display_expiry_date
     return JsonResponse({
         'coupon_code': coupon.code,
         'coupon_description': coupon.description,

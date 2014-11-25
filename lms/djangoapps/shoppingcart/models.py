@@ -2,6 +2,7 @@
 
 from collections import namedtuple
 from datetime import datetime
+from datetime import timedelta
 from decimal import Decimal
 import analytics
 import pytz
@@ -752,6 +753,10 @@ class Coupon(models.Model):
         return "[Coupon] code: {} course: {}".format(self.code, self.course_id)
 
     objects = SoftDeleteCouponManager()
+
+    @property
+    def display_expiry_date(self):
+        return (self.expiration_date-timedelta(days=1)).strftime("%B %d, %Y")
 
 
 class CouponRedemption(models.Model):

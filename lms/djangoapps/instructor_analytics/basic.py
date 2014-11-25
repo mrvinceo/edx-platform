@@ -264,8 +264,7 @@ def coupon_codes_features(features, coupons_list):
         # codes csv. In the case of active and generated registration codes the redeemed_by value will be None.
         #  They have not been redeemed yet
         if coupon_dict['expiration_date']:
-            coupon_dict['expiration_date'] = coupon_dict['expiration_date'] - timedelta(days=1)
-            coupon_dict['expiration_date'] = coupon_dict['expiration_date'].strftime("%B %d, %Y")
+            coupon_dict['expiration_date'] = coupon.display_expiry_date
         coupon_dict['course_id'] = coupon_dict['course_id'].to_deprecated_string()
         return coupon_dict
     return [extract_coupon(coupon, features) for coupon in coupons_list]
