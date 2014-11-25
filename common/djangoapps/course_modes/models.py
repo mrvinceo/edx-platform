@@ -99,6 +99,21 @@ class CourseMode(models.Model):
         return {mode.slug: mode for mode in cls.modes_for_course(course_id)}
 
     @classmethod
+    def create_course_mode(cls, course_id, min_price, mode_slug, currency, mode_display_name=DEFAULT_MODE_SLUG):
+        """
+        Create and returns the CourseMode object
+        """
+        course_mode = cls(
+            course_id=course_id,
+            min_price=min_price,
+            mode_slug=mode_slug,
+            mode_display_name=mode_display_name,
+            currency=currency
+        )
+        course_mode.save()
+        return course_mode
+
+    @classmethod
     def mode_for_course(cls, course_id, mode_slug):
         """
         Returns the mode for the course corresponding to mode_slug.

@@ -4,7 +4,7 @@ Views for the course_mode module
 
 import decimal
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponse
 from django.shortcuts import redirect
 from django.views.generic.base import View
 from django.utils.translation import ugettext as _
@@ -192,3 +192,10 @@ class ChooseModeView(View):
             return 'honor'
         else:
             return None
+
+@login_required
+def add_honor_mode_to_course(request):
+    course_id = request.GET.get('course_id')
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
+    CourseMode.create_course_mode(course_id=course_key, min_price=20, mode_slug='honor', currency='usd')
+    return HttpResponse('success')
