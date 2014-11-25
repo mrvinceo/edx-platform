@@ -94,7 +94,7 @@ def add_course_to_cart(request, course_id):
         return HttpResponseBadRequest(_('You are already registered in course {0}.'.format(course_id)))
     else:
         # in case a coupon redemption code has been applied, new items should also get a discount if applicable.
-        order = getattr(paid_course_item, 'order')
+        order = paid_course_item.order
         order_items = order.orderitem_set.all().select_subclasses()
         redeemed_coupons = CouponRedemption.objects.filter(order=order)
         for redeemed_coupon in redeemed_coupons:

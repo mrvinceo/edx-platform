@@ -77,17 +77,14 @@ def sale_order_record_features(course_id, features):
         sale_order_dict.update({'total_used_codes': 'N/A'})
 
         # Extracting OrderItem information of unit_cost, list_price and status
-        order_item_dict = dict((feature, getattr(purchased_course, feature))
+        order_item_dict = dict((feature, getattr(purchased_course, feature, None))
                                for feature in order_item_features)
         order_item_dict.update({"coupon_code": 'N/A'})
 
         coupon_redemption = CouponRedemption.objects.select_related('coupon').filter(order_id=purchased_course.order_id)
         # if coupon is redeemed against the order, update the information in the order_item_dict
         if coupon_redemption:
-            coupon_codes = list()
-            for redemption in coupon_redemption:
-                coupon_codes.append(redemption.coupon.code)
-
+            coupon_codes = [redemption.coupon.code for redemption in coupon_redemption]
             order_item_dict.update({'coupon_code': ", ".join(coupon_codes)})
 
         sale_order_dict.update(dict(order_item_dict.items()))
