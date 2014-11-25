@@ -24,15 +24,15 @@ def url_class(is_active):
 %>
 
 % if staff_access:
-  <nav class="instructor-bar">
+  <nav class="courseware-preview">
     <div class="inner-wrapper">
-      <ol class="instructor-actions">
-        <li class="instructor-action action-preview-mode">
-          <label for="mode-select" class="action-label">${_("previewing as:")}</label>
-          <select class="view-mode-select"id="mode-select" name="select">
-            <option value="1">${_("Staff")}</option>
-            <option value="2">${_("Student in Learner Group A")}</option>
-            <option value="3">${_("Student in Group B")}</option>
+      <ol class="courseware-preview-actions">
+        <li class="action-preview">
+          <label for="action-preview-select" class="action-preview-label">${_("previewing as:")}</label>
+          <select class="action-preview-select" id="action-preview-select" name="select">
+            <option value="Staff">${_("Staff")}</option>
+            <option value="Student in Learner Group A">${_("Student in Learner Group A")}</option>
+            <option value="Student in Group B">${_("Student in Group B")}</option>
           </select>
         </li>
       </ol>

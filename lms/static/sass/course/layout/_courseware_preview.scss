@@ -1,0 +1,27 @@
+.courseware-preview {
+  @include clearfix();
+  @include box-sizing(border-box);
+  margin: 0 auto 0;
+  padding: ($baseline*0.75);
+  width: 100%;
+  background-color: $gray-l3;
+
+  .inner-wrapper {
+    margin: 0 auto;
+    max-width: 1180px;
+    width: flex-grid(12);
+  }
+
+  .courseware-preview-actions {
+    display: inline-block;
+
+    .action-preview {
+      display: inline-block;
+
+      .action-preview-label {
+        margin-right: ($baseline/2);
+        vertical-align: middle;
+      }
+    }
+  }
+}
