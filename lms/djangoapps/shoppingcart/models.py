@@ -756,7 +756,10 @@ class Coupon(models.Model):
 
     @property
     def display_expiry_date(self):
-        return (self.expiration_date-timedelta(days=1)).strftime("%B %d, %Y")
+        """
+        return the coupon expiration date in the readable format
+        """
+        return (self.expiration_date - timedelta(days=1)).strftime("%B %d, %Y")
 
 
 class CouponRedemption(models.Model):

@@ -84,13 +84,11 @@ def add_coupon(request, course_id):  # pylint: disable=W0613
         if request.POST.get('expiration_date'):
             expiration_date = request.POST.get('expiration_date')
             try:
-                expiration_date = datetime.datetime.strptime(expiration_date, "%m/%d/%Y").replace(tzinfo=pytz.UTC)+datetime.timedelta(days=1)
+                expiration_date = datetime.datetime.strptime(expiration_date, "%m/%d/%Y").replace(tzinfo=pytz.UTC) + datetime.timedelta(days=1)
             except ValueError:
-                return JsonResponse(
-                    {'message': _("Please enter the date in this format i-e month/day/year")}
-                    , status=400
-                )  # status code 400: Bad Request
-
+                return JsonResponse({
+                    'message': _("Please enter the date in this format i-e month/day/year")
+                }, status=400)  # status code 400: Bad Request
 
         coupon = Coupon(
             code=code, description=description,

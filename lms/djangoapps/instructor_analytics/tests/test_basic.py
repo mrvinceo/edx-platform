@@ -268,7 +268,6 @@ class TestCourseRegistrationCodeAnalyticsBasic(ModuleStoreTestCase):
             )
             coupon.save()
 
-
         active_coupons = Coupon.objects.filter(
             Q(course_id=self.course.id),
             Q(is_active=True),

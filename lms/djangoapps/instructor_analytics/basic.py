@@ -8,7 +8,6 @@ from shoppingcart.models import (
     OrderTypes, RegistrationCodeRedemption, CourseRegistrationCode
 )
 from django.contrib.auth.models import User
-from datetime import timedelta
 import xmodule.graders as xmgraders
 from django.core.exceptions import ObjectDoesNotExist
 
