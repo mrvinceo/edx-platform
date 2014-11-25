@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-
-import json
-import mock
 from datetime import datetime
+import json
 from pytz import UTC
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
-from student.tests.factories import UserFactory, CourseEnrollmentFactory
+from edxmako import add_lookup
+import mock
+
+from courseware.tests.modulestore_config import TEST_DATA_MOCK_MODULESTORE
 from django_comment_client.tests.factories import RoleFactory
 from django_comment_client.tests.unicode import UnicodeTestMixin
 import django_comment_client.utils as utils
+from student.tests.factories import UserFactory, CourseEnrollmentFactory
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
-from courseware.tests.tests import TEST_DATA_MONGO_MODULESTORE
-from edxmako import add_lookup
 
 
 class DictionaryTestCase(TestCase):
@@ -41,7 +42,7 @@ class DictionaryTestCase(TestCase):
         self.assertEqual(utils.merge_dict(d1, d2), expected)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class AccessUtilsTestCase(ModuleStoreTestCase):
     def setUp(self):
         self.course = CourseFactory.create()
@@ -78,7 +79,7 @@ class AccessUtilsTestCase(ModuleStoreTestCase):
         self.assertFalse(ret)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class CoursewareContextTestCase(ModuleStoreTestCase):
     def setUp(self):
         self.course = CourseFactory.create(org="TestX", number="101", display_name="Test Course")
@@ -134,7 +135,7 @@ class CoursewareContextTestCase(ModuleStoreTestCase):
         assertThreadCorrect(threads[1], self.discussion2, "Subsection / Discussion 2")
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class CategoryMapTestCase(ModuleStoreTestCase):
     def setUp(self):
         self.course = CourseFactory.create(
