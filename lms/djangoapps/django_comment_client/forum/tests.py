@@ -25,15 +25,14 @@ from nose.tools import assert_true  # pylint: disable=E0611
 from mock import patch, Mock, ANY, call
 
 from course_groups.models import CourseUserGroup
-
-TEST_DATA_MONGO_MODULESTORE = mixed_store_config(TEST_DATA_DIR, {}, include_xml=False)
+from courseware.tests.modulestore_config import TEST_DATA_MOCK_MODULESTORE
 
 log = logging.getLogger(__name__)
 
 # pylint: disable=C0111
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class ViewsExceptionTestCase(UrlResetMixin, ModuleStoreTestCase):
 
     @patch.dict("django.conf.settings.FEATURES", {"ENABLE_DISCUSSION_SERVICE": True})
@@ -171,7 +170,7 @@ class PartialDictMatcher(object):
         ])
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 @patch('requests.request')
 class SingleThreadTestCase(ModuleStoreTestCase):
     def setUp(self):
@@ -280,7 +279,7 @@ class SingleThreadTestCase(ModuleStoreTestCase):
         )
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 @patch('requests.request')
 class SingleCohortedThreadTestCase(CohortedContentTestCase):
     def _create_mock_cohorted_thread(self, mock_request):
@@ -773,7 +772,7 @@ class FollowedThreadsDiscussionGroupIdTestCase(CohortedContentTestCase, Cohorted
         )
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class InlineDiscussionTestCase(ModuleStoreTestCase):
     def setUp(self):
         self.course = CourseFactory.create(org="TestX", number="101", display_name="Test Course")
@@ -803,7 +802,7 @@ class InlineDiscussionTestCase(ModuleStoreTestCase):
         self.assertEqual(response_data["discussion_data"][0]["courseware_title"], expected_courseware_title)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 @patch('requests.request')
 class UserProfileTestCase(ModuleStoreTestCase):
 
@@ -915,7 +914,7 @@ class UserProfileTestCase(ModuleStoreTestCase):
         self.assertEqual(response.status_code, 405)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 @patch('requests.request')
 class CommentsServiceRequestHeadersTestCase(UrlResetMixin, ModuleStoreTestCase):
     @patch.dict("django.conf.settings.FEATURES", {"ENABLE_DISCUSSION_SERVICE": True})
@@ -976,7 +975,7 @@ class CommentsServiceRequestHeadersTestCase(UrlResetMixin, ModuleStoreTestCase):
         self.assert_all_calls_have_header(mock_request, "X-Edx-Api-Key", "test_api_key")
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class InlineDiscussionUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
     def setUp(self):
         self.course = CourseFactory.create()
@@ -996,7 +995,7 @@ class InlineDiscussionUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
         self.assertEqual(response_data["discussion_data"][0]["body"], text)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class ForumFormDiscussionUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
     def setUp(self):
         self.course = CourseFactory.create()
@@ -1017,7 +1016,7 @@ class ForumFormDiscussionUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
         self.assertEqual(response_data["discussion_data"][0]["body"], text)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class ForumDiscussionSearchUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
     def setUp(self):
         self.course = CourseFactory.create()
@@ -1042,7 +1041,7 @@ class ForumDiscussionSearchUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin
         self.assertEqual(response_data["discussion_data"][0]["body"], text)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class SingleThreadUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
     def setUp(self):
         self.course = CourseFactory.create()
@@ -1064,7 +1063,7 @@ class SingleThreadUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
         self.assertEqual(response_data["content"]["body"], text)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class UserProfileUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
     def setUp(self):
         self.course = CourseFactory.create()
@@ -1085,7 +1084,7 @@ class UserProfileUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
         self.assertEqual(response_data["discussion_data"][0]["body"], text)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class FollowedThreadsUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
     def setUp(self):
         self.course = CourseFactory.create()
@@ -1106,7 +1105,7 @@ class FollowedThreadsUnicodeTestCase(ModuleStoreTestCase, UnicodeTestMixin):
         self.assertEqual(response_data["discussion_data"][0]["body"], text)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class EnrollmentTestCase(ModuleStoreTestCase):
     """
     Tests for the behavior of views depending on if the student is enrolled

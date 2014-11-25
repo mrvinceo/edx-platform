@@ -4,11 +4,15 @@ Additionally tests that bulk email is always disabled for non-Mongo
 backed courses, regardless of email feature flag, and that the
 view is conditionally available when Course Auth is turned on.
 """
+import unittest
+
+from mock import patch
+
 from django.test.utils import override_settings
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
-from courseware.tests.tests import TEST_DATA_MONGO_MODULESTORE
+from courseware.tests.modulestore_config import TEST_DATA_MOCK_MODULESTORE
 from student.tests.factories import AdminFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
@@ -16,10 +20,8 @@ from xmodule.modulestore import ModuleStoreEnum
 
 from bulk_email.models import CourseAuthorization
 
-from mock import patch
 
-
-@override_settings(MODULESTORE=TEST_DATA_MONGO_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class TestInstructorDashboardEmailView(ModuleStoreTestCase):
     """
     Check for email view displayed with flag

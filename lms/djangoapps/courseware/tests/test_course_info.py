@@ -1,17 +1,20 @@
 """
 Test the course_info xblock
 """
-import mock
-from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
+from django.test.utils import override_settings
+import mock
 
-from .helpers import LoginEnrollmentTestCase
+from courseware.tests.modulestore_config import (
+    TEST_DATA_MOCK_MODULESTORE, TEST_DATA_MIXED_XML_MODULESTORE
+)
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
-from courseware.tests.modulestore_config import TEST_DATA_MIXED_MODULESTORE
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
 
+from .helpers import LoginEnrollmentTestCase
 
-@override_settings(MODULESTORE=TEST_DATA_MIXED_MODULESTORE)
+
+@override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class CourseInfoTestCase(LoginEnrollmentTestCase, ModuleStoreTestCase):
     def setUp(self):
         self.course = CourseFactory.create()
@@ -41,7 +44,7 @@ class CourseInfoTestCase(LoginEnrollmentTestCase, ModuleStoreTestCase):
         self.assertNotIn("OOGIE BLOOGIE", resp.content)
 
 
-@override_settings(MODULESTORE=TEST_DATA_MIXED_MODULESTORE)
+@override_settings(MODULESTORE=TEST_DATA_MIXED_XML_MODULESTORE)
 class CourseInfoTestCaseXML(LoginEnrollmentTestCase, ModuleStoreTestCase):
     # The following XML test course (which lives at common/test/data/2014)
     # is closed; we're testing that a course info page still appears when
