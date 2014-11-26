@@ -4,6 +4,7 @@ from stevedore.extension import Extension, ExtensionManager
 
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
 from xmodule.partitions.partitions import Group, UserPartition, USER_PARTITION_SCHEME_NAMESPACE
+from xmodule.modulestore.django import modulestore
 
 import courseware.access as access
 from courseware.tests.factories import UserFactory
@@ -74,13 +75,27 @@ class GroupAccessTestCase(TestCase):
     component = ItemFactory.create(category='problem', parent=vertical)
 
     ALL_BLOCKS = [chapter, section, vertical, component]
+    ALL_PARENT_CHILD = [
+        (chapter, section),
+        (chapter, vertical),
+        (chapter, component),
+        (section, vertical),
+        (section, component),
+        (vertical, component),
+    ]
 
-
-    def _set_group(self, user, partition, group):
+    def set_user_group(self, user, partition, group):
         """
         Internal DRY / shorthand.
         """
         partition.scheme.set_group_for_user(user, partition, group)
+
+    def set_group_access(self, block, access_dict):
+        """
+        DRY helper.
+        """
+        block.group_access = access_dict
+        modulestore().update_item(block, 1)
 
     @classmethod
     def setUpClass(cls):
@@ -97,7 +112,7 @@ class GroupAccessTestCase(TestCase):
         ):
             assert(
                 block.group_access is None,
-                'block.group_access had unexpected default {}'.format(block.group_access),
+                'unexpected default group access in {}: {}'.format(block, block.group_access),
             )
 
     def setUp(self):
@@ -113,12 +128,12 @@ class GroupAccessTestCase(TestCase):
             block.group_access = None
 
         self.red_cat = UserFactory()  # student in red and cat groups
-        self._set_group(self.red_cat, self.animal_partition, self.cat_group)
-        self._set_group(self.red_cat, self.color_partition, self.red_group)
+        self.set_user_group(self.red_cat, self.animal_partition, self.cat_group)
+        self.set_user_group(self.red_cat, self.color_partition, self.red_group)
 
         self.blue_dog = UserFactory()  # student in blue and dog groups
-        self._set_group(self.blue_dog, self.animal_partition, self.dog_group)
-        self._set_group(self.blue_dog, self.color_partition, self.blue_group)
+        self.set_user_group(self.blue_dog, self.animal_partition, self.dog_group)
+        self.set_user_group(self.blue_dog, self.color_partition, self.blue_group)
 
         self.gray_mouse = UserFactory()  # student in no group
 
@@ -137,7 +152,7 @@ class GroupAccessTestCase(TestCase):
         Access checks are correctly enforced on the block when a single group
         is specified for a single partition.
         """
-        block.group_access = {self.animal_partition.id: [self.cat_group.id]}
+        self.set_group_access(block, {self.animal_partition.id: [self.cat_group.id]})
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, False)
         self.check_access(self.gray_mouse, block, False)
@@ -148,7 +163,7 @@ class GroupAccessTestCase(TestCase):
         Access checks are correctly enforced on the block when multiple groups
         are specified for a single partition.
         """
-        block.group_access = {self.animal_partition.id: [self.cat_group.id, self.dog_group.id]}
+        self.set_group_access(block, {self.animal_partition.id: [self.cat_group.id, self.dog_group.id]})
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, True)
         self.check_access(self.gray_mouse, block, False)
@@ -159,7 +174,7 @@ class GroupAccessTestCase(TestCase):
         No group access checks are enforced on the block when group_access
         declares a partition but does not specify any groups.
         """
-        block.group_access = {self.animal_partition.id: []}
+        self.set_group_access(block, {self.animal_partition.id: []})
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, True)
         self.check_access(self.gray_mouse, block, True)
@@ -170,7 +185,7 @@ class GroupAccessTestCase(TestCase):
         No group access checks are enforced on the block when group_access is an
         empty dictionary.
         """
-        block.group_access = {}
+        self.set_group_access(block, {})
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, True)
         self.check_access(self.gray_mouse, block, True)
@@ -180,7 +195,7 @@ class GroupAccessTestCase(TestCase):
         """
         No group access checks are enforced on the block when group_access is None.
         """
-        block.group_access = None
+        self.set_group_access(block, None)
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, True)
         self.check_access(self.gray_mouse, block, True)
@@ -191,7 +206,7 @@ class GroupAccessTestCase(TestCase):
         No group access checks are enforced on the block when group_access
         specifies a partition but its value is None.
         """
-        block.group_access = {self.animal_partition.id: None}
+        self.set_group_access(block, {self.animal_partition.id: None})
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, True)
         self.check_access(self.gray_mouse, block, True)
@@ -202,7 +217,7 @@ class GroupAccessTestCase(TestCase):
         No group access checks are enforced on the block when group_access
         specifies a partition id that does not exist in course.user_partitions.
         """
-        block.group_access = {9: []}
+        self.set_group_access(block, {9: []})
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, True)
         self.check_access(self.gray_mouse, block, True)
@@ -213,7 +228,7 @@ class GroupAccessTestCase(TestCase):
         No group access checks are enforced on the block when group_access
         contains a group id that does not exist in its referenced partition.
         """
-        block.group_access = {self.animal_partition.id: [99]}
+        self.set_group_access(block, {self.animal_partition.id: [99]})
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, True)
         self.check_access(self.gray_mouse, block, True)
@@ -224,10 +239,13 @@ class GroupAccessTestCase(TestCase):
         Group access restrictions are correctly enforced when multiple partition
         / group rules are defined.
         """
-        block.group_access = {
-            self.animal_partition.id: [self.cat_group.id],
-            self.color_partition.id: [self.red_group.id],
-        }
+        self.set_group_access(
+            block,
+            {
+                self.animal_partition.id: [self.cat_group.id],
+                self.color_partition.id: [self.red_group.id],
+            }
+        )
         self.check_access(self.red_cat, block, True)
         self.check_access(self.blue_dog, block, False)
         self.check_access(self.gray_mouse, block, False)
@@ -238,12 +256,106 @@ class GroupAccessTestCase(TestCase):
         Group access restrictions correctly deny access even when some (but not
         all) group_access rules are satisfied.
         """
-        block.group_access = {
+        self.set_group_access(block, {
             self.animal_partition.id: [self.cat_group.id],
             self.color_partition.id: [self.blue_group.id],
-        }
+        })
         self.check_access(self.red_cat, block, False)
         self.check_access(self.blue_dog, block, False)
+
+    @ddt.data(*ALL_PARENT_CHILD)
+    @ddt.unpack
+    def test_merged_groups(self, parent_block, child_block):
+        """
+        """
+        # parent is accessible to dogs and cats
+        self.set_group_access(
+            parent_block, {
+                self.animal_partition.id: [self.cat_group.id, self.dog_group.id],
+            }
+        )
+        # but child is accessible only to cats
+        self.set_group_access(
+            child_block, {
+                self.animal_partition.id: [self.cat_group.id],
+            }
+        )
+
+        self.assertEqual(
+            access._get_merged_group_access(parent_block),
+            {self.animal_partition.id: [self.cat_group.id, self.dog_group.id]},
+        )
+        self.assertEqual(
+            access._get_merged_group_access(child_block),
+            {self.animal_partition.id: [self.cat_group.id]},
+        )
+
+        self.check_access(self.red_cat, parent_block, True)
+        self.check_access(self.blue_dog, parent_block, True)
+        self.check_access(self.red_cat, child_block, True)
+        self.check_access(self.blue_dog, child_block, False)
+
+    @ddt.data(*ALL_PARENT_CHILD)
+    @ddt.unpack
+    def test_merged_partitions(self, parent_block, child_block):
+        """
+        """
+        # parent is accessible to dogs
+        self.set_group_access(
+            parent_block,
+            {self.animal_partition.id: [self.dog_group.id]},
+        )
+        # child is accessible to red
+        self.set_group_access(
+            child_block,
+            {self.color_partition.id: [self.red_group.id]},
+        )
+        self.assertEqual(
+            access._get_merged_group_access(parent_block),
+            {self.animal_partition.id: [self.dog_group.id]},
+        )
+        self.assertEqual(
+            access._get_merged_group_access(child_block),
+            {
+                self.animal_partition.id: [self.dog_group.id],
+                self.color_partition.id: [self.red_group.id],
+            },
+        )
+        self.check_access(self.red_cat, parent_block, False)
+        self.check_access(self.blue_dog, parent_block, True)
+        self.check_access(self.red_cat, child_block, False)
+        self.check_access(self.blue_dog, child_block, False)
+
+    @ddt.data(*ALL_PARENT_CHILD)
+    @ddt.unpack
+    def test_merged_disjoint(self, parent_block, child_block):
+        """
+        """
+        # parent is accessible to dogs
+        self.set_group_access(
+            parent_block, {
+                self.animal_partition.id: [self.dog_group.id],
+            }
+        )
+        # child is accessible to cats
+        self.set_group_access(
+            child_block, {
+                self.animal_partition.id: [self.cat_group.id],
+            }
+        )
+        self.assertEqual(
+            access._get_merged_group_access(parent_block),
+            {self.animal_partition.id: [self.dog_group.id]},
+        )
+        self.assertEqual(
+            access._get_merged_group_access(child_block),
+            {self.animal_partition.id: False},
+        )
+
+        self.check_access(self.red_cat, parent_block, False)
+        self.check_access(self.blue_dog, parent_block, True)
+        self.check_access(self.red_cat, child_block, False)
+        self.check_access(self.blue_dog, child_block, False)
 
     def test_staff_overrides_group_access(self):
         """

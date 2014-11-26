@@ -9,6 +9,17 @@ from xmodule.modulestore.inheritance import UserPartitionList
 _ = lambda text: text
 
 
+class GroupAccessDict(Dict):
+    """Special List class for serializing the group_access field"""
+    def from_json(self, access_dict):
+        if access_dict is not None:
+            return {int(k): access_dict[k] for k in access_dict}
+
+    def to_json(self, access_dict):
+        if access_dict is not None:
+            return {unicode(k): access_dict[k] for k in access_dict}
+
+
 class LmsBlockMixin(XBlockMixin):
     """
     Mixin that defines fields common to all blocks used in the LMS
@@ -55,7 +66,7 @@ class LmsBlockMixin(XBlockMixin):
         default=False,
         scope=Scope.settings,
     )
-    group_access = Dict(
+    group_access = GroupAccessDict(
         help=_(
             "A dictionary that maps which groups can be shown this block. The keys "
             "are group configuration ids and the values are a list of group IDs. "
