@@ -8,64 +8,10 @@
 </div>
 <script type="text/javascript">
     (function (require) {
-        require(['underscore', 'js/edxnotes/views/notes'], function (_, Notes) {
-            var element = document.getElementById('edx-notes-wrapper-${uid}'),
-                checkbox = $('a.action-toggle-notes'),
-                checkboxIcon = checkbox.children('i'),
-                visibility = ${edxnotes_visibility},
-                visibilityUrl = '${edxnotes_visibility_url}';
-
-            console.log('Initial visibility: ' + visibility);
-            toggleAnnotator();
-
-            checkbox.on('click', function(event) {
-                visibility = !visibility;
-                toggleCheckbox();
-
-                $.ajax({
-                    type: 'PUT',
-                    url: window.location.origin + visibilityUrl,
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify({'visibility': visibility}),
-                    success: function(response) {
-                        console.log('PUT Success.');
-                        toggleAnnotator();
-                    },
-                    error: function(response) {console.log('PUT Error.');}
-                });
-                event.preventDefault();
-            });
-
-            function toggleCheckbox() {
-                checkboxIcon.removeClass('icon-check icon-check-empty');
-                checkboxIcon.addClass(visibility ? 'icon-check' : 'icon-check-empty');
-            }
-
-            function toggleAnnotator() {
-                if (visibility) {
-                    createAnnotator();
-                } else {
-                    destroyAnnotator();
-                }
-            }
-
-            function createAnnotator() {
-                console.time(element);
-                Notes.factory(element, ${json.dumps(params)});
-                console.timeEnd(element);
-            }
-
-            function destroyAnnotator() {
-                if (Annotator) {
-                    _.each(Annotator._instances, function(instance) {
-                        instance.destroy();
-                    });
-                    console.log('Destroyed Annotator.');
-                } else{
-                    console.log('No Annotator to destroy.');
-                }
-            }
+        require(['js/edxnotes/views/edxnotes_wrapper_factory'], function(EdxnotesWrapperFactory) {
+            EdxnotesWrapperFactory(
+                'edx-notes-wrapper-${uid}', ${json.dumps(params)}, ${edxnotes_visibility}, '${edxnotes_visibility_url}'
+            );
         });
     }).call(this, require || RequireJS.require);
 </script>
