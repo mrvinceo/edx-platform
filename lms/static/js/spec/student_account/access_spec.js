@@ -5,6 +5,7 @@ define([
     'js/student_account/views/AccessView',
     'js/student_account/views/FormView',
     'js/student_account/enrollment',
+    'js/student_account/emailoptin',
     'js/student_account/shoppingcart'
 ], function($, TemplateHelpers, AjaxHelpers, AccessView, FormView, EnrollmentInterface, ShoppingCartInterface) {
         describe('edx.student.account.AccessView', function() {
