@@ -1,0 +1,4 @@
+<a href><%- gettext(name) %></a>
+<% if (is_closable) { %>
+    <a href class="btn-close icon-close">x</a>
+<% } %>

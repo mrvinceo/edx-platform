@@ -7,22 +7,15 @@ function (gettext, _, Backbone) {
         className: 'tab-item',
         activeClassName: 'is-active',
 
-        templateHtml: [
-            '<a href>',
-                '<%- gettext(name) %>',
-            '</a>',
-            '<% if(is_closable){ %><a href class="ico-close">x</a><% } %>',
-        ].join(''),
-
         events: {
             'click': 'selectHandler',
             'click a': function (event) { event.preventDefault(); },
-            'click .ico-close': 'closeHandler'
+            'click .btn-close': 'closeHandler'
         },
 
         initialize: function (options) {
             _.bindAll(this);
-            this.template = _.template(this.templateHtml);
+            this.template = _.template($('#tab-item-tpl').text());
             this.options = options;
             this.$el.addClass(this.model.get('class_name'));
             this.bindEvents();

@@ -397,6 +397,8 @@
         'lms/include/js/spec/edxnotes/utils/logger_spec.js',
         'lms/include/js/spec/edxnotes/views/notes_page_spec.js',
         'lms/include/js/spec/edxnotes/views/search_box_spec.js',
+        'lms/include/js/spec/edxnotes/views/tabs_list_spec.js',
+        'lms/include/js/spec/edxnotes/views/tab_item_spec.js',
         'lms/include/js/spec/edxnotes/models/tab_spec.js',
         'lms/include/js/spec/edxnotes/shim_spec.js'
     ]);
