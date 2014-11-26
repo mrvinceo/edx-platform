@@ -235,3 +235,23 @@ class CourseModeViewTest(ModuleStoreTestCase):
         response = self.client.post(choose_track_url, self.POST_PARAMS_FOR_COURSE_MODE['unsupported'])
 
         self.assertEqual(400, response.status_code)
+
+    def test_add_honor_mode_to_course(self):
+        """
+        test to add the honor mode for the course id
+        """
+        add_honor_mode_to_course_url = reverse('course_modes.views.add_honor_mode_to_course')
+        response = self.client.get(add_honor_mode_to_course_url, {'course_id': self.course.id})
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('success', response.content)
+
+    def test_fail_add_honor_mode_to_course(self):
+        """
+        test that fails to create the course mode honor
+        when not giving the course_id in the query parameters
+        """
+        add_honor_mode_to_course_url = reverse('course_modes.views.add_honor_mode_to_course')
+
+        response = self.client.get(add_honor_mode_to_course_url, {'course_id': ''})
+        self.assertEqual(400, response.status_code)
+        self.assertEqual('course_id is None', response.content)

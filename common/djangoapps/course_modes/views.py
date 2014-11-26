@@ -193,9 +193,16 @@ class ChooseModeView(View):
         else:
             return None
 
+
 @login_required
 def add_honor_mode_to_course(request):
+    """
+    Create the honor mode for the course_id
+    """
     course_id = request.GET.get('course_id')
-    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    CourseMode.create_course_mode(course_id=course_key, min_price=20, mode_slug='honor', currency='usd')
-    return HttpResponse('success')
+    if course_id:
+        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
+        CourseMode.create_course_mode(course_id=course_key, min_price=20, mode_slug='honor', currency='usd')
+        return HttpResponse('success')
+    else:
+        return HttpResponseBadRequest('course_id is None')
