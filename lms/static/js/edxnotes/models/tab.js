@@ -11,15 +11,15 @@ define(['backbone'], function (Backbone) {
 
         activate: function () {
             this.collection.each(_.bind(function(model) {
-                // Unactivate all other models.
+                // Inactivate all other models.
                 if (model !== this) {
-                    model.unactivate();
+                    model.inactivate();
                 }
             }, this));
             this.set('is_active', true);
         },
 
-        unactivate: function () {
+        inactivate: function () {
             this.set('is_active', false);
         },
 

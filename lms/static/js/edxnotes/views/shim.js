@@ -48,7 +48,7 @@ define(['jquery', 'underscore', 'annotator'], function ($, _, Annotator) {
                 _.invoke(Annotator._instances, 'unfreeze');
             } else {
                 // Unfreeze only this instance and unbound associated 'click.edxnotes:freeze' handler
-                $(document).off('click.edxnotes:freeze'+this.uid);
+                $(document).off('click.edxnotes:freeze' + this.uid);
                 this.isFrozen = false;
             }
 

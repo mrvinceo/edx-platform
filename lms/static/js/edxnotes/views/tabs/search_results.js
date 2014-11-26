@@ -32,7 +32,6 @@ define([
             this.searchResults = null;
             this.searchBox = new SearchBoxView({
                 el: this.$('form.search-box').get(0),
-                token: this.options.token,
                 user: this.options.user,
                 courseId: this.options.courseId,
                 debug: this.options.debug,

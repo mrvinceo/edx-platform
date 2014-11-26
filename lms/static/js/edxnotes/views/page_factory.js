@@ -8,7 +8,6 @@ define([
      * @param {Object} params Params for the Notes page.
      * @param {Array} params.notesList A list of note models.
      * @param {Boolean} params.debugMode Enable the flag to see debug information.
-     * @param {String} params.token An authentication token for the edx-notes-api.
      * @param {String} params.user User id of notes owner.
      * @param {String} params.courseId Course id.
      * @param {String} params.endpoint The endpoint of the store.
@@ -21,7 +20,6 @@ define([
             el: $('.edx-notes-page-wrapper').get(0),
             collection: collection,
             debug: params.debugMode,
-            token: params.token,
             user: params.user,
             courseId: params.courseId,
             endpoint: params.endpoint

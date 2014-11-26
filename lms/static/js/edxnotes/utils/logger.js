@@ -24,7 +24,7 @@ define([], function () {
 
         while(index--) {
             if (loggersList[index].id === logger.id) {
-                removedLogger = [].splice.call(loggersList, index, 1);
+                removedLogger = [].splice.call(loggersList, index, 1)[0];
                 removedLogger._history = [];
                 removedLogger._times = {};
                 break;

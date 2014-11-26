@@ -22,7 +22,6 @@ define([
             this.searchResultsView = new SearchResultsView({
                 el: this.el,
                 tabsCollection: this.tabsCollection,
-                token: this.options.token,
                 user: this.options.user,
                 courseId: this.options.courseId,
                 debug: this.options.debug,

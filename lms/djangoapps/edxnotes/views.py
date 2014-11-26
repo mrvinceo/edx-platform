@@ -12,7 +12,6 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from courseware.courses import get_course_with_access
 from edxnotes.exceptions import EdxNotesParseError
 from edxnotes.helpers import (
-    get_token,
     get_notes,
     is_feature_enabled,
     search
@@ -35,7 +34,6 @@ def edxnotes(request, course_id):
         "course": course,
         "search_endpoint": reverse("search_notes", kwargs={"course_id": course_id}),
         "notes": notes,
-        "token": get_token(request.user),
         "debug": json.dumps(settings.DEBUG),
     }
 

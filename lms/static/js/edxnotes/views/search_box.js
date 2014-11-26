@@ -36,7 +36,10 @@ define([
 
             if (!(data && _.has(data, 'total') && _.has(data, 'rows'))) {
                 this.logger.log('Wrong data', data, this.searchQuery);
-                return [0, [], this.searchQuery];
+                data = {
+                    total: 0,
+                    rows: []
+                };
             }
 
             collection = new NotesCollection(data.rows, {parse: true});
@@ -78,8 +81,9 @@ define([
         },
 
         onError:function (jXHR) {
-            var message = gettext('This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.'),
-                searchQuery = this.gerSearchQuery();
+            var defaultMessage = gettext('This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.'),
+                searchQuery = this.gerSearchQuery(),
+                message;
 
             if (jXHR.responseText) {
                 try {
@@ -87,7 +91,7 @@ define([
                 } catch (error) { }
             }
 
-            this.options.error(message, searchQuery);
+            this.options.error(message || defaultMessage, searchQuery);
             this.logger.log('Fail response', jXHR.responseText);
         },
 
@@ -98,13 +102,13 @@ define([
 
         enableForm: function () {
             this.isDisabled = false;
-            this.$el.removeClass('.is-looking');
+            this.$el.removeClass('is-looking');
             this.$('button[type=submit]').removeClass('is-disabled');
         },
 
         disableForm: function () {
             this.isDisabled = true;
-            this.$el.addClass('.is-looking');
+            this.$el.addClass('is-looking');
             this.$('button[type=submit]').addClass('is-disabled');
         },
 
