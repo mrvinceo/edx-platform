@@ -36,7 +36,7 @@
     </div>
     <div class="discount">
       <div class="code-text">
-          <span class="pull-right">${_('Total')}: <b>$${"{0:0.2f}".format(amount)} USD</b></span>
+          <span class="pull-right">${_('Total')}: <b>${settings.PAID_COURSE_REGISTRATION_CURRENCY[1]}${"{0:0.2f}".format(amount)} ${settings.PAID_COURSE_REGISTRATION_CURRENCY[0].upper()}</b></span>
       </div>
       </div>
       <div class="col-two">
