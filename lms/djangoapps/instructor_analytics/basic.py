@@ -83,7 +83,7 @@ def sale_order_record_features(course_id, features):
 
         coupon_redemption = CouponRedemption.objects.select_related('coupon').filter(order_id=purchased_course.order_id)
         # if coupon is redeemed against the order, update the information in the order_item_dict
-        if coupon_redemption:
+        if coupon_redemption.exists():
             coupon_codes = [redemption.coupon.code for redemption in coupon_redemption]
             order_item_dict.update({'coupon_code': ", ".join(coupon_codes)})
 
@@ -94,9 +94,7 @@ def sale_order_record_features(course_id, features):
             total_used_codes = RegistrationCodeRedemption.objects.filter(registration_code__in=registration_codes).count()
             sale_order_dict.update({'total_used_codes': total_used_codes})
 
-            codes = list()
-            for reg_code in registration_codes:
-                codes.append(reg_code.code)
+            codes = [reg_code.code for reg_code in registration_codes]
 
             # Extracting registration code information
             obj_course_reg_code = registration_codes.all()[:1].get()
@@ -147,9 +145,7 @@ def sale_record_features(course_id, features):
         sale_dict.update({"total_codes": sale.courseregistrationcode_set.all().count()})
         sale_dict.update({'total_used_codes': total_used_codes})
 
-        codes = list()
-        for reg_code in sale.courseregistrationcode_set.all():
-            codes.append(reg_code.code)
+        codes = [reg_code.code for reg_code in sale.courseregistrationcode_set.all()]
 
         # Extracting registration code information
         obj_course_reg_code = sale.courseregistrationcode_set.all()[:1].get()
