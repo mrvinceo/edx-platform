@@ -2,6 +2,7 @@ import unittest
 import decimal
 import ddt
 from django.conf import settings
+from mock import patch
 from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 
@@ -236,15 +237,18 @@ class CourseModeViewTest(ModuleStoreTestCase):
 
         self.assertEqual(400, response.status_code)
 
+    @patch.dict('django.conf.settings.FEATURES', {'CONVERT_TO_PAID_CERTIFICATE_COURSE_MODE_FOR_TESTING': True})
     def test_add_honor_mode_to_course(self):
         """
         test to add the honor mode for the course id
         """
         add_honor_mode_to_course_url = reverse('course_modes.views.add_honor_mode_to_course')
+
         response = self.client.get(add_honor_mode_to_course_url, {'course_id': self.course.id})
         self.assertEqual(200, response.status_code)
         self.assertEqual('success', response.content)
 
+    @patch.dict('django.conf.settings.FEATURES', {'CONVERT_TO_PAID_CERTIFICATE_COURSE_MODE_FOR_TESTING': True})
     def test_fail_add_honor_mode_to_course(self):
         """
         test that fails to create the course mode honor
