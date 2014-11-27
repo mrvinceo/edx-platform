@@ -42,7 +42,7 @@ define([
             });
 
             it('should be displayed properly', function() {
-                var pageItems = $('article.edx-notes-page-item');
+                var pageItems = $('.edx-notes-page-item');
                 // Make sure we have exactly 3 page items created
                 expect(pageItems.length).toEqual(3);
                 // Check that the ordering is correct and each model's text and quote are rendered
@@ -53,7 +53,7 @@ define([
             });
 
             it('should display update value and accompanying text', function() {
-                var pageItems = $('article.edxnotes-page-item');
+                var pageItems = $('.edxnotes-page-item');
 
                 _.each(pageItems, function(el, index) {
                     expect(pageItems.eq(index).find('dl>dt').last().text()).toBe('Last Edited:');

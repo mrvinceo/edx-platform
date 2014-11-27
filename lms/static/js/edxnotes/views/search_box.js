@@ -9,9 +9,11 @@ define([
             'submit': 'submitHandler'
         },
 
+        errorMessage: gettext('This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.'),
+
         initialize: function (options) {
             _.bindAll(this);
-            this.options = _.defaults(options, {
+            this.options = _.defaults(options || {}, {
                 search: function () {},
                 error: function () {},
             });
@@ -36,13 +38,10 @@ define([
 
             if (!(data && _.has(data, 'total') && _.has(data, 'rows'))) {
                 this.logger.log('Wrong data', data, this.searchQuery);
-                data = {
-                    total: 0,
-                    rows: []
-                };
+                return null;
             }
 
-            collection = new NotesCollection(data.rows, {parse: true});
+            collection = new NotesCollection(data.rows);
             return [collection, data.total, this.searchQuery];
         },
 
@@ -76,13 +75,16 @@ define([
 
         onSuccess: function (data) {
             var args = this.prepareData(data);
-            this.options.search.apply(this, args);
-            this.logger.log('Successful response', args);
+            if (args) {
+                this.options.search.apply(this, args);
+                this.logger.log('Successful response', args);
+            } else {
+                this.options.error(this.errorMessage, this.searchQuery);
+            }
         },
 
         onError:function (jXHR) {
-            var defaultMessage = gettext('This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.'),
-                searchQuery = this.gerSearchQuery(),
+            var searchQuery = this.gerSearchQuery(),
                 message;
 
             if (jXHR.responseText) {
@@ -91,8 +93,8 @@ define([
                 } catch (error) { }
             }
 
-            this.options.error(message || defaultMessage, searchQuery);
-            this.logger.log('Fail response', jXHR.responseText);
+            this.options.error(message || this.errorMessage, searchQuery);
+            this.logger.log('Response fails', jXHR.responseText);
         },
 
         onComplete: function () {

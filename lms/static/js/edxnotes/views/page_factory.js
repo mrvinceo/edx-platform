@@ -14,7 +14,7 @@ define([
      * @return {Object} An instance of NotesPageView.
      */
     return function (params) {
-        var collection = new NotesCollection(params.notesList, {parse: true});
+        var collection = new NotesCollection(params.notesList);
 
         return new NotesPageView({
             el: $('.edx-notes-page-wrapper').get(0),

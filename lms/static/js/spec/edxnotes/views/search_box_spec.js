@@ -36,7 +36,7 @@ define([
         };
 
         beforeEach(function () {
-            loadFixtures('js/fixtures/edxnotes/search_box.html');
+            loadFixtures('js/fixtures/edxnotes/edxnotes.html');
             this.searchBox = getSearchBox();
         });
 
@@ -69,12 +69,13 @@ define([
             );
         });
 
-        it('returns an empty collection if received data structure is wrong', function () {
+        it('returns default error message if received data structure is wrong', function () {
             var requests = AjaxHelpers.requests(this);
             submitForm(this.searchBox, 'test_text');
             AjaxHelpers.respondWithJson(requests, {});
-            expect(this.searchBox.options.search).toHaveBeenCalledWith(
-                jasmine.any(NotesCollection), 0, 'test_text'
+            expect(this.searchBox.options.error).toHaveBeenCalledWith(
+                'This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.',
+                'test_text'
             );
         });
 

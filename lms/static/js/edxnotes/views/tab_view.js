@@ -14,7 +14,7 @@ define([
 
         initialize: function (options) {
             _.bindAll(this);
-            this.options = _.defaults(options, {
+            this.options = _.defaults(options || {}, {
                 createTabOnInitialization: true
             });
 
@@ -105,7 +105,7 @@ define([
          */
         showErrorMessage: function (message) {
             this.$('.inline-error')
-                .html(message)
+                .text(message)
                 .removeClass('is-hidden');
         },
 
@@ -114,7 +114,7 @@ define([
          */
         hideErrorMessage: function () {
             this.$('.inline-error')
-                .html('')
+                .text('')
                 .addClass('is-hidden');
         }
     });
