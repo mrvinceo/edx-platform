@@ -1,7 +1,7 @@
 define([
-    'jquery', 'js/common_helpers/template_helpers',
-    'js/edxnotes/collections/tabs', 'js/edxnotes/views/tabs_list',
-    'js/edxnotes/views/subview', 'js/edxnotes/views/tab_view', 'jasmine-jquery'
+    'jquery', 'js/common_helpers/template_helpers', 'js/edxnotes/collections/tabs',
+    'js/edxnotes/views/tabs_list', 'js/edxnotes/views/subview',
+    'js/edxnotes/views/tab_view', 'jasmine-jquery'
 ], function(
     $, TemplateHelpers, TabsCollection, TabsListView, SubView, TabView
 ) {
@@ -49,6 +49,9 @@ define([
                     } else {
                       return trimmedText.indexOf(text) !== -1;
                     }
+                },
+                toHaveLength: function (number) {
+                    return $(this.actual).length === number;
                 }
             });
             loadFixtures('js/fixtures/edxnotes/edxnotes.html');
@@ -62,7 +65,7 @@ define([
 
         it('can create a tab and content on initialization', function () {
             var view = getView(this.tabsCollection);
-            expect(this.tabsCollection.length).toBe(1);
+            expect(this.tabsCollection).toHaveLength(1);
             expect(view.$('.tab-item')).toExist();
             expect(view.$('.course-info')).toContainHtml('<p>test view content</p>');
         });
@@ -71,7 +74,7 @@ define([
             var view = getView(this.tabsCollection, {
                 createTabOnInitialization: false
             });
-            expect(this.tabsCollection.length).toBe(0);
+            expect(this.tabsCollection).toHaveLength(0);
             expect(view.$('.tab-item')).not.toExist();
             expect(view.$('.course-info')).not.toContainHtml('<p>test view content</p>');
         });
@@ -80,19 +83,19 @@ define([
             var view = getView(this.tabsCollection);
             this.tabsCollection.add({'class_name': 'second-tab'});
             view.$('.tab-item.second-tab').click();
-            expect(view.$('.tab-item').length).toBe(2);
+            expect(view.$('.tab-item')).toHaveLength(2);
             expect(view.$('.course-info')).not.toContainHtml('<p>test view content</p>');
-            expect(view.contentView).toBe(null);
+            expect(view.contentView).toBeNull();
         });
 
         it('can remove the content if tab is closed', function () {
             var view = getView(this.tabsCollection);
             view.onClose =  jasmine.createSpy();
             view.$('.tab-item .btn-close').click();
-            expect(view.$('.tab-item').length).toBe(0);
+            expect(view.$('.tab-item')).toHaveLength(0);
             expect(view.$('.course-info')).not.toContainHtml('<p>test view content</p>');
-            expect(view.contentView).toBe(null);
-            expect(view.tabModel).toBe(null);
+            expect(view.contentView).toBeNull();
+            expect(view.tabModel).toBeNull();
             expect(view.onClose).toHaveBeenCalled();
         });
 

@@ -1,8 +1,8 @@
 ;(function (define, undefined) {
 'use strict';
 define([
-    'gettext', 'js/edxnotes/views/tab_view',
-    'js/edxnotes/views/subview', 'js/edxnotes/views/search_box'
+    'gettext', 'js/edxnotes/views/tab_view', 'js/edxnotes/views/subview',
+    'js/edxnotes/views/search_box'
 ], function (gettext, TabView, SubView, SearchBoxView) {
     var SearchResultsView = TabView.extend({
 
