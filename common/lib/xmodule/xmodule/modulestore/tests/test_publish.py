@@ -8,6 +8,7 @@ from xmodule.modulestore.exceptions import ItemNotFoundError
 from xmodule.modulestore.tests.test_split_w_old_mongo import SplitWMongoCourseBoostrapper
 from xmodule.modulestore.tests.factories import check_mongo_calls, mongo_uses_error_check
 
+
 @attr('mongo')
 class TestPublish(SplitWMongoCourseBoostrapper):
     """

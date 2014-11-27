@@ -391,7 +391,9 @@ class TestViewAuth(ModuleStoreTestCase, LoginEnrollmentTestCase):
 
 @override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class TestBetatesterAccess(ModuleStoreTestCase):
-
+    """
+    Tests for the beta tester feature
+    """
     def setUp(self):
 
         now = datetime.datetime.now(pytz.UTC)

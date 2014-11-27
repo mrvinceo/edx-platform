@@ -1,12 +1,13 @@
 """
 Define test configuration for modulestores.
 """
-
-from xmodule.modulestore.tests.django_utils import xml_store_config, \
-    mixed_store_config
+from tempfile import mkdtemp
 
 from django.conf import settings
-from tempfile import mkdtemp
+
+from xmodule.modulestore.tests.django_utils import (
+    xml_store_config, mixed_store_config
+)
 
 TEST_DATA_DIR = settings.COMMON_TEST_DATA_ROOT
 
@@ -33,7 +34,7 @@ TEST_DATA_MIXED_XML_MODULESTORE = mixed_store_config(TEST_DATA_DIR, MAPPINGS)
 
 # This modulestore will provide both a mixed mongo editable modulestore, and
 # an XML store with just the toy course loaded.
-TEST_DATA_MIXED_TOY_MODULESTORE = mixed_store_config(TEST_DATA_DIR, {'edX/toy/2012_Fall': 'xml',})
+TEST_DATA_MIXED_TOY_MODULESTORE = mixed_store_config(TEST_DATA_DIR, {'edX/toy/2012_Fall': 'xml', })
 
 # All store requests now go through mixed
 # Use this modulestore if you specifically want to test mongo and not a mocked modulestore.

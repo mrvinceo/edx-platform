@@ -6,8 +6,12 @@ from courseware.tests.modulestore_config import TEST_DATA_MIXED_TOY_MODULESTORE
 import django_comment_common.models as models
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 
+
 @override_settings(MODULESTORE=TEST_DATA_MIXED_TOY_MODULESTORE)
 class RoleClassTestCase(ModuleStoreTestCase):
+    """
+    Tests for roles of the comment client service integration
+    """
     def setUp(self):
         # For course ID, syntax edx/classname/classdate is important
         # because xmodel.course_module.id_to_location looks for a string to split
@@ -46,6 +50,9 @@ class RoleClassTestCase(ModuleStoreTestCase):
 
 
 class PermissionClassTestCase(TestCase):
+    """
+    Tests for permissions of the comment client service integration
+    """
     def setUp(self):
         self.permission = models.Permission.objects.get_or_create(name="test")[0]
 

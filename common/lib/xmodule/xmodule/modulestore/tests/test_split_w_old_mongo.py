@@ -14,6 +14,7 @@ from xmodule.modulestore.split_mongo.split import SplitMongoModuleStore
 from xmodule.modulestore.tests.mongo_connection import MONGO_PORT_NUM, MONGO_HOST
 from xmodule.modulestore.tests.test_cross_modulestore_import_export import MemoryCache
 
+
 @attr('mongo')
 class SplitWMongoCourseBoostrapper(unittest.TestCase):
     """

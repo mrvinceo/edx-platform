@@ -12,6 +12,7 @@ from xblock.fields import Reference, ReferenceList, ReferenceValueDict
 from xmodule.modulestore.split_migrator import SplitMigrator
 from xmodule.modulestore.tests.test_split_w_old_mongo import SplitWMongoCourseBoostrapper
 
+
 @attr('mongo')
 class TestMigration(SplitWMongoCourseBoostrapper):
     """

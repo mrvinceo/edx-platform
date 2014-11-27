@@ -1,3 +1,6 @@
+"""
+Tests for course group views
+"""
 from collections import namedtuple
 import json
 

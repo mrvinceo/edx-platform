@@ -68,6 +68,9 @@ class StaticTabDateTestCase(LoginEnrollmentTestCase, ModuleStoreTestCase):
 
 @override_settings(MODULESTORE=TEST_DATA_MIXED_XML_MODULESTORE)
 class StaticTabDateTestCaseXML(LoginEnrollmentTestCase, ModuleStoreTestCase):
+    """
+    Tests for the static tab dates of an XML course
+    """
     # The following XML test course (which lives at common/test/data/2014)
     # is closed; we're testing that tabs still appear when
     # the course is already closed

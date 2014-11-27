@@ -4,13 +4,10 @@ Additionally tests that bulk email is always disabled for non-Mongo
 backed courses, regardless of email feature flag, and that the
 view is conditionally available when Course Auth is turned on.
 """
-import unittest
-
-from mock import patch
-
 from django.test.utils import override_settings
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from mock import patch
 
 from courseware.tests.modulestore_config import TEST_DATA_MOCK_MODULESTORE
 from student.tests.factories import AdminFactory

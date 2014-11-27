@@ -34,6 +34,7 @@ from xmodule.modulestore.edit_info import EditInfoMixin
 BRANCH_NAME_DRAFT = ModuleStoreEnum.BranchName.draft
 BRANCH_NAME_PUBLISHED = ModuleStoreEnum.BranchName.published
 
+
 @attr('mongo')
 class SplitModuleTest(unittest.TestCase):
     '''

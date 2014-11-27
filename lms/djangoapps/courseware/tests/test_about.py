@@ -123,6 +123,9 @@ class AboutTestCase(LoginEnrollmentTestCase, ModuleStoreTestCase):
 
 @override_settings(MODULESTORE=TEST_DATA_MIXED_XML_MODULESTORE)
 class AboutTestCaseXML(LoginEnrollmentTestCase, ModuleStoreTestCase):
+    """
+    Tests for the course about page
+    """
     # The following XML test course (which lives at common/test/data/2014)
     # is closed; we're testing that an about page still appears when
     # the course is already closed

@@ -26,7 +26,6 @@ from instructor.management.commands.openended_stats import calculate_task_statis
 from instructor.utils import get_module_for_student
 
 
-
 @override_settings(MODULESTORE=TEST_DATA_MIXED_XML_MODULESTORE)
 class OpenEndedPostTest(ModuleStoreTestCase):
     """Test the openended_post management command."""

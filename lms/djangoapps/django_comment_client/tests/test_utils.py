@@ -44,6 +44,10 @@ class DictionaryTestCase(TestCase):
 
 @override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class AccessUtilsTestCase(ModuleStoreTestCase):
+    """
+    Base testcase class for access and roles for the
+    comment client service integration
+    """
     def setUp(self):
         self.course = CourseFactory.create()
         self.course_id = self.course.id
@@ -81,6 +85,10 @@ class AccessUtilsTestCase(ModuleStoreTestCase):
 
 @override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class CoursewareContextTestCase(ModuleStoreTestCase):
+    """
+    Base testcase class for courseware context for the
+    comment client service integration
+    """
     def setUp(self):
         self.course = CourseFactory.create(org="TestX", number="101", display_name="Test Course")
         self.discussion1 = ItemFactory.create(
@@ -137,6 +145,10 @@ class CoursewareContextTestCase(ModuleStoreTestCase):
 
 @override_settings(MODULESTORE=TEST_DATA_MOCK_MODULESTORE)
 class CategoryMapTestCase(ModuleStoreTestCase):
+    """
+    Base testcase class for discussion categories for the
+    comment client service integration
+    """
     def setUp(self):
         self.course = CourseFactory.create(
             org="TestX", number="101", display_name="Test Course",
