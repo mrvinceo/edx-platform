@@ -11,7 +11,7 @@ urlpatterns = patterns(
     url(r'^choose/{}/$'.format(settings.COURSE_ID_PATTERN), views.ChooseModeView.as_view(), name="course_modes_choose"),  # pylint: disable=no-value-for-parameter
 )
 
-if settings.FEATURES["CONVERT_TO_PAID_CERTIFICATE_COURSE_MODE_FOR_TESTING"]:
+if settings.FEATURES["CONVERT_TO_PAID_COURSE_REGISTRATION_MODE_FOR_TESTING"]:
     urlpatterns += (
         url(r'^add_honor_mode_to_course/$', views.add_honor_mode_to_course),
     )

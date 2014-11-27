@@ -6,7 +6,7 @@ End-to-end tests for the LMS Instructor Dashboard.
 from ..helpers import UniqueCourseTest
 from ...pages.lms.auto_auth import AutoAuthPage
 from ...pages.lms.instructor_dashboard import InstructorDashboardPage
-from ...pages.lms.instructor_dashboard_paid_certificates import AddHonorModeToCoursePage
+from ...pages.lms.instructor_dashboard_paid_course_registrations import AddHonorModeToCoursePage
 from ...fixtures.course import CourseFixture
 
 
@@ -94,11 +94,14 @@ class ECommerceCouponsListTest(UniqueCourseTest):
 
     def setUp(self):
         super(ECommerceCouponsListTest, self).setUp()
+
+        # setup a course.
         self.course_fixture = CourseFixture(**self.course_info).install()
 
         # login as an instructor
         AutoAuthPage(self.browser, course_id=self.course_id, staff=True).visit()
 
+        # Convert the course to a Paid Course Registration
         AddHonorModeToCoursePage(self.browser, self.course_fixture._course_key).visit()  # pylint: disable=W0212
 
         # go to the coupons list on the E-Commerce section of the instructor dashboard

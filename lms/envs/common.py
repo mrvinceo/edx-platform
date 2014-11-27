@@ -196,7 +196,7 @@ FEATURES = {
     'AUTOMATIC_AUTH_FOR_TESTING': False,
 
     # for acceptance tests of Paid Certificates
-    'CONVERT_TO_PAID_CERTIFICATE_COURSE_MODE_FOR_TESTING': False,
+    'CONVERT_TO_PAID_COURSE_REGISTRATION_MODE_FOR_TESTING': False,
 
     # Toggle to enable chat availability (configured on a per-course
     # basis in Studio)

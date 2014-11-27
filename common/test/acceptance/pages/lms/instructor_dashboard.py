@@ -5,7 +5,7 @@ Instructor (2) dashboard page.
 
 from bok_choy.page_object import PageObject
 from .course_page import CoursePage
-from .instructor_dashboard_paid_certificates import ECommercePage
+from .instructor_dashboard_paid_course_registrations import ECommercePage
 import os
 
 

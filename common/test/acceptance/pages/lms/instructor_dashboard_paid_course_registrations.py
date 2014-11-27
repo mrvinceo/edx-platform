@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Instructor Dashboard Page for Paid Certificates.
+Instructor Dashboard Page for Paid Course Registrations.
 """
 
 from bok_choy.page_object import PageObject
@@ -10,7 +10,7 @@ import urllib
 
 class AddHonorModeToCoursePage(PageObject):
     """
-    PageObject to add Honor Mode to a given course to make it a Paid Certificate.
+    PageObject to add Honor Mode to a given course to make it a Paid Course Registration.
     """
 
     def __init__(self, browser, course_id):

@@ -237,7 +237,7 @@ class CourseModeViewTest(ModuleStoreTestCase):
 
         self.assertEqual(400, response.status_code)
 
-    @patch.dict('django.conf.settings.FEATURES', {'CONVERT_TO_PAID_CERTIFICATE_COURSE_MODE_FOR_TESTING': True})
+    @patch.dict('django.conf.settings.FEATURES', {'CONVERT_TO_PAID_COURSE_REGISTRATION_MODE_FOR_TESTING': True})
     def test_add_honor_mode_to_course(self):
         """
         test to add the honor mode for the course id
@@ -248,7 +248,7 @@ class CourseModeViewTest(ModuleStoreTestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual('success', response.content)
 
-    @patch.dict('django.conf.settings.FEATURES', {'CONVERT_TO_PAID_CERTIFICATE_COURSE_MODE_FOR_TESTING': True})
+    @patch.dict('django.conf.settings.FEATURES', {'CONVERT_TO_PAID_COURSE_REGISTRATION_MODE_FOR_TESTING': True})
     def test_fail_add_honor_mode_to_course(self):
         """
         test that fails to create the course mode honor
